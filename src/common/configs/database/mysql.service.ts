@@ -3,6 +3,8 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import * as path from 'path';
 import * as process from 'process';
+import {DB_TYPE} from "src/utils/constants"
+
 
 @Injectable()
 export class MysqlService implements TypeOrmOptionsFactory {
@@ -10,7 +12,7 @@ export class MysqlService implements TypeOrmOptionsFactory {
   createTypeOrmOptions(): TypeOrmModuleOptions {
     console.log(this.configService.get('DB_PASSWORD'));
     return {
-      type: 'mysql',
+      type: DB_TYPE,
       host: this.configService.get<string>('DB_HOST'),
       port: this.configService.get<number>('DB_PORT'),
       username: this.configService.get<string>('DB_USER'),

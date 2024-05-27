@@ -1,13 +1,14 @@
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
+import {DB_TYPE} from "src/utils/constants"
 
 config();
 
 const configService = new ConfigService();
 
 export const dataSource = new DataSource({
-  type: 'mysql',
+  type: DB_TYPE,
   host: configService.get<string>('DATABASE_HOST'),
   port: configService.get<number>('DATABASE_PORT'),
   username: configService.get<string>('DATABASE_USERNAME'),

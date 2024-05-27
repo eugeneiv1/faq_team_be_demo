@@ -1,7 +1,6 @@
 import { DataSourceOptions } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { TestEntity } from 'src/entities/test-module.entity';
-import { DB_TYPE } from '../../../utils/constants';
+import { DB_TYPE } from 'src/utils/constants';
 
 export const createTypeOrmConfig = (
   configService: ConfigService,

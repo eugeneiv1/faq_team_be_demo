@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
-import { TestService } from 'src/test-module/test-module.service';
+import { ApiTags } from '@nestjs/swagger';
+import { TestService } from 'src/modules/test-module/test-module.service';
 import { TestEntity } from 'src/entities/test-module.entity';
 import { TEST_MODULE_ROUTE } from 'src/utils/constants';
-import { TestDto } from 'src/test-module/dto/test-dto.dto';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { TestDto } from 'src/modules/test-module/dto/test-dto.dto';
 
 @Controller(TEST_MODULE_ROUTE)
 @ApiTags(TEST_MODULE_ROUTE)
