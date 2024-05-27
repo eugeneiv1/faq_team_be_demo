@@ -9,7 +9,6 @@ import { DB_TYPE } from 'src/utils/constants';
 export class MysqlService implements TypeOrmOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    console.log(this.configService.get('DB_PASSWORD'));
     return {
       type: DB_TYPE,
       host: this.configService.get<string>('DB_HOST'),
