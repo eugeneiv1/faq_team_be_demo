@@ -4,6 +4,8 @@ import { AppService } from 'src/app.service';
 import { TestEntityModule } from 'src/modules/test-module/test-module.module';
 import { AppController } from 'src/app.controller';
 import { MysqlModule } from 'src/common/configs/database/mysql.module';
+import { UsersModule } from 'src/modules/users/users.module';
+import { AuthModule } from 'src/modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { MysqlModule } from 'src/common/configs/database/mysql.module';
       envFilePath: '.env',
       isGlobal: true,
     }),
+    UsersModule,
+    AuthModule,
     MysqlModule,
     TestEntityModule,
   ],
