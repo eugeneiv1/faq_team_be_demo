@@ -22,8 +22,8 @@ export class MysqlService implements TypeOrmOptionsFactory {
       migrations: [
         path.join(process.cwd(), 'dist', 'src', 'migrations', '*.js'),
       ],
-      synchronize: false,
       migrationsRun: true,
+      synchronize: false,
     };
   }
 }
