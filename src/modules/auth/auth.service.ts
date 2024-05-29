@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
@@ -13,23 +17,42 @@ export class AuthService {
   ) {}
 
   async validateUser(email: string, password: string): Promise<UserDto> {
-    const user = await this.usersService.findOne(email);
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const { ...result } = user;
-      return result;
+    try {
+      const user = await this.usersService.findOne(email);
+      if (user && (await bcrypt.compare(password, user.password))) {
+        const { ...result } = user;
+        return result;
+      }
+      throw new UnauthorizedException('Invalid credentials');
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'An error occurred while validating user',
+      );
     }
-    return null;
   }
 
   async login(user: UserDto) {
-    console.log(user);
-    const payload = { email: user.email, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+    try {
+      const payload = { email: user.email, sub: user.id };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'An error occurred while logging in',
+      );
+    }
   }
 
   async register(user: LogDto) {
-    return this.usersService.create(user);
+    try {
+      const hashedPassword = await bcrypt.hash(user.password, 10);
+      const newUser = { ...user, password: hashedPassword };
+      return await this.usersService.create(newUser);
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'An error occurred while registering user',
+      );
+    }
   }
 }
