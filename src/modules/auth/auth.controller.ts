@@ -1,7 +1,6 @@
 import { Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { LocalAuthGuard } from 'src/modules/auth/local-auth.guard';
-import { AUTH_ROUTE, SIGNIN_ROUTE, SIGNUP_ROUTE } from 'src/utils/constants';
 import { UserDto } from 'src/modules/auth/dto/auth.dto';
 import { LogDto } from 'src/modules/auth/dto/log.dto';
 import {
@@ -9,24 +8,36 @@ import {
   ApiOkResponse,
   ApiInternalServerErrorResponse,
 } from '@nestjs/swagger';
+import { AuthControllerDocStrings } from 'src/utils/constants/docsTexts';
+import { ERouteNames } from 'src/entities/enums/route-names.enum';
 
-@Controller(AUTH_ROUTE)
+@Controller(ERouteNames.AUTH_ROUTE)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
-  @Post(SIGNIN_ROUTE)
-  @ApiOperation({ summary: 'Sign in a user' })
-  @ApiOkResponse({ description: 'User signed in successfully', type: UserDto })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  @Post(ERouteNames.SIGNIN_ROUTE)
+  @ApiOperation({ summary: AuthControllerDocStrings.operations.SIGNIN.summary })
+  @ApiOkResponse({
+    description: AuthControllerDocStrings.operations.SIGNIN.okResponse,
+    type: UserDto,
+  })
+  @ApiInternalServerErrorResponse({
+    description: AuthControllerDocStrings.operations.SIGNIN.errorResponse,
+  })
   async login(@Request() req) {
     return this.authService.login(req.user as UserDto);
   }
 
-  @Post(SIGNUP_ROUTE)
-  @ApiOperation({ summary: 'Register a new user' })
-  @ApiOkResponse({ description: 'User registered successfully', type: UserDto })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
+  @Post(ERouteNames.SIGNUP_ROUTE)
+  @ApiOperation({ summary: AuthControllerDocStrings.operations.SIGNUP.summary })
+  @ApiOkResponse({
+    description: AuthControllerDocStrings.operations.SIGNUP.okResponse,
+    type: UserDto,
+  })
+  @ApiInternalServerErrorResponse({
+    description: AuthControllerDocStrings.operations.SIGNUP.errorResponse,
+  })
   async register(@Request() req) {
     return this.authService.register(req.body as LogDto);
   }

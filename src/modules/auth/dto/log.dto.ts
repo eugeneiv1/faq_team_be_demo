@@ -1,33 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { AuthDtoConstants } from 'src/utils/constants/docsTexts';
 
 export class LogDto {
-  /**
-   * The name associated with the log entry.
-   * @example "John Doe"
-   */
   @ApiProperty({
-    description: 'The name associated with the log entry.',
-    example: 'John Doe',
-  })
-  name: string;
-
-  /**
-   * The email address associated with the log entry.
-   * @example "john.doe@example.com"
-   */
-  @ApiProperty({
-    description: 'The email address associated with the log entry.',
-    example: 'john.doe@example.com',
+    description: AuthDtoConstants.email.description,
+    example: AuthDtoConstants.email.example,
   })
   email: string;
 
-  /**
-   * The password for the user account.
-   * @example "$3f$00$bfOlGlUdTopkI1aKJgfXEwRXhbss7spSgaktfTskP01IDAObl7Aiu"
-   */
   @ApiProperty({
-    description: 'The password for the user account.',
-    example: '$3f$00$bfOlGlUdTopkI1aKJgfXEwRXhbss7spSgaktfTskP01IDAObl7Aiu',
+    description: AuthDtoConstants.password.description,
+    example: AuthDtoConstants.password.example,
   })
   password: string;
 }

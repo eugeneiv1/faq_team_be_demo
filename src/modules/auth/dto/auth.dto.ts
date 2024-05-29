@@ -1,43 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { AuthDtoConstants } from 'src/utils/constants/docsTexts';
 
 export class UserDto {
-  /**
-   * The unique identifier of the user.
-   * @example 1
-   */
   @ApiProperty({
-    description: 'The unique identifier of the user.',
-    example: '8a6e0804-2bd0-4672-b79d-d97027f9071a',
+    description: AuthDtoConstants.id.description,
+    example: AuthDtoConstants.id.example,
   })
   id: string;
 
-  /**
-   * The name of the user.
-   * @example "John Doe"
-   */
   @ApiProperty({
-    description: 'The name of the user.',
-    example: 'John Doe',
+    description: AuthDtoConstants.name.description,
+    example: AuthDtoConstants.name.example,
   })
   name: string;
 
-  /**
-   * The email address of the user.
-   * @example "john.doe@example.com"
-   */
   @ApiProperty({
-    description: 'The email address of the user.',
-    example: 'john.doe@example.com',
+    description: AuthDtoConstants.email.description,
+    example: AuthDtoConstants.email.example,
   })
   email: string;
 
-  /**
-   * The password for the user account.
-   * @example "$3f$00$bfOlGlUdTopkI1aKJgfXEwRXhbss7spSgaktfTskP01IDAObl7Aiu"
-   */
   @ApiProperty({
-    description: 'The password for the user account.',
-    example: '$3f$00$bfOlGlUdTopkI1aKJgfXEwRXhbss7spSgaktfTskP01IDAObl7Aiu',
+    description: AuthDtoConstants.password.description,
+    example: AuthDtoConstants.password.example,
   })
   password: string;
 }

@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { UserDto } from 'src/modules/auth/dto/auth.dto';
 import { LogDto } from 'src/modules/auth/dto/log.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { UsersServiceErrors } from 'src/utils/constants/errorTexts';
 
 @Injectable()
 export class UsersService {
@@ -22,13 +23,11 @@ export class UsersService {
     try {
       const user = await this.usersRepository.findOne({ where: { email } });
       if (!user) {
-        throw new NotFoundException(`User with email ${email} not found`);
+        throw new NotFoundException(UsersServiceErrors.errors.NOT_FOUND(email));
       }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException(
-        'An error occurred while finding the user',
-      );
+      throw new InternalServerErrorException(UsersServiceErrors.errors.FIND);
     }
   }
 
@@ -43,9 +42,7 @@ export class UsersService {
       } as UserDto;
       return await this.usersRepository.save(newUser);
     } catch (error) {
-      throw new InternalServerErrorException(
-        'An error occurred while creating the user',
-      );
+      throw new InternalServerErrorException(UsersServiceErrors.errors.CREATE);
     }
   }
 }

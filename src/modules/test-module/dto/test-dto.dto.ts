@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { testDtoProperties } from 'src/utils/constants';
+import { testDtoProperties } from 'src/utils/constants/docsTexts';
 
 export class TestDto {
   @ApiProperty(testDtoProperties.id)
