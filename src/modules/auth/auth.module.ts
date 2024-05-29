@@ -6,7 +6,7 @@ import { AuthController } from 'src/modules/auth/auth.controller';
 import { LocalStrategy } from 'src/modules/auth/local.strategy';
 import { UsersModule } from 'src/modules/users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { SECRET_TYPE, SIGNIN_EXPIRATION_TIME } from 'src/utils/constants';
+import { SIGNIN_EXPIRATION_TIME } from 'src/utils/constants';
 
 @Module({
   imports: [
@@ -15,7 +15,7 @@ import { SECRET_TYPE, SIGNIN_EXPIRATION_TIME } from 'src/utils/constants';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>(SECRET_TYPE),
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: { expiresIn: SIGNIN_EXPIRATION_TIME },
       }),
       inject: [ConfigService],
