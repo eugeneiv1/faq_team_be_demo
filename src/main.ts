@@ -4,10 +4,12 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from 'src/app.module';
 import { swgBuilderLabels } from 'src/utils/generalConstants';
 import { ERouteNames } from 'src/entities/enums/route-names.enum';
+import { HttpExceptionFilter } from 'src/common/filters/httpException.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   const config = new DocumentBuilder()
     .setTitle(swgBuilderLabels.title)
