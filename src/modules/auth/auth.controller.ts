@@ -1,7 +1,7 @@
 import { Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthService } from 'src/modules/auth/auth.service';
 import { LocalAuthGuard } from 'src/modules/auth/local-auth.guard';
-import { UserDto } from 'src/modules/auth/dto/auth.dto';
+import { UserDto, AccesTokenDto } from 'src/modules/auth/dto/auth.dto';
 import { LogDto } from 'src/modules/auth/dto/log.dto';
 import {
   ApiOperation,
@@ -25,7 +25,7 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: AuthControllerDocStrings.operations.SIGNIN.errorResponse,
   })
-  async login(@Request() req) {
+  async login(@Request() req): Promise<AccesTokenDto> {
     return this.authService.login(req.user as UserDto);
   }
 
@@ -38,7 +38,7 @@ export class AuthController {
   @ApiInternalServerErrorResponse({
     description: AuthControllerDocStrings.operations.SIGNUP.errorResponse,
   })
-  async register(@Request() req) {
+  async register(@Request() req): Promise<UserDto> {
     return this.authService.register(req.body as LogDto);
   }
 }

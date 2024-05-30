@@ -9,6 +9,7 @@ import { UserDto } from 'src/modules/auth/dto/auth.dto';
 import { LogDto } from 'src/modules/auth/dto/log.dto';
 import { AuthServiceErrors } from 'src/utils/constants/errorTexts';
 import * as bcrypt from 'bcrypt';
+import { AccesTokenDto } from 'src/modules/auth/dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -34,7 +35,7 @@ export class AuthService {
     }
   }
 
-  async login(user: UserDto) {
+  async login(user: UserDto): Promise<AccesTokenDto> {
     try {
       const payload = { email: user.email, sub: user.id };
       return {
@@ -45,7 +46,7 @@ export class AuthService {
     }
   }
 
-  async register(user: LogDto) {
+  async register(user: LogDto): Promise<UserDto> {
     try {
       return await this.usersService.create(user);
     } catch (error) {
