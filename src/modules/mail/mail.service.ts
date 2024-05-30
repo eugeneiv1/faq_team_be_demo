@@ -11,6 +11,7 @@ export class MailService {
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService,
   ) {}
+
   public async sendMail(
     recipient: string,
     subject: ESubjectName,
