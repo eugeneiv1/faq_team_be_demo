@@ -1,13 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
 import { EErrorMessage } from '../../common/enums/error-message.enum';
+import { UserEntity } from '../../entities/user.entity';
 import { UserRepository } from '../repository/services/user.repository';
 
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  public async isUserExist(userId: string) {
+  public async isUserExist(userId: string): Promise<UserEntity> {
     try {
       const user = await this.userRepository.findOneBy({ id: userId });
 

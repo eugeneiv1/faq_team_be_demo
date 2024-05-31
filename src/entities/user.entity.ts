@@ -8,7 +8,7 @@ import { BaseEntity } from './models/base.entity';
 @Entity(ETableName.USERS)
 export class UserEntity extends BaseEntity {
   @Column()
-  user_name: string;
+  full_name: string;
 
   @Column({ unique: true })
   email: string;
@@ -60,4 +60,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ nullable: true })
   shoes_size: number;
+
+  @Column({ nullable: true })
+  cart: string[];
 }
