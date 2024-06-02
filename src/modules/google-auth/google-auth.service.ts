@@ -37,6 +37,7 @@ export class GoogleAuthService {
           this.userRepository.create({
             full_name: `${firstName} ${lastName}`,
             email,
+            is_verified: true,
           }),
         );
 
