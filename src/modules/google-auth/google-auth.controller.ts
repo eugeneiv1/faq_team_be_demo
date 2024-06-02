@@ -1,6 +1,6 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { ERouteName } from '../../common/enums/route-name.enum';
@@ -8,6 +8,7 @@ import { GoogleAuthResponseDto } from './dto/response/google-auth-response.dto';
 import { GoogleAuthService } from './google-auth.service';
 import { IGoogleAuth } from './interfaces/google.interfaces';
 
+@ApiTags('Authorization via Google')
 @Controller(ERouteName.GOOGLE_ROUTE)
 export class GoogleAuthController {
   constructor(private readonly googleAuthService: GoogleAuthService) {}

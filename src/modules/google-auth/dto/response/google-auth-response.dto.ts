@@ -5,4 +5,5 @@ export class GoogleAuthResponseDto {
   authInfo: EGoogLeAuthAction;
   email?: string;
   full_name?: string;
+  is_verified: boolean;
 }

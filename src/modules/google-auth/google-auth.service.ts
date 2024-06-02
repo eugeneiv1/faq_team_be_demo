@@ -55,6 +55,7 @@ export class GoogleAuthService {
           authInfo,
           email: user.email,
           full_name: user.full_name,
+          is_verified: user.is_verified,
         };
       }
 
@@ -72,7 +73,7 @@ export class GoogleAuthService {
         secure: false, // Set to true if using HTTPS in production
       });
 
-      return { accessToken, authInfo };
+      return { accessToken, authInfo, is_verified: isEmailExist.is_verified };
     } catch (error) {
       if (
         error instanceof HttpException &&
