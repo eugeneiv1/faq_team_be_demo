@@ -16,7 +16,8 @@ export class AuthService {
 
   public async signUp(dto: SignUpRequestDto): Promise<void> {
     try {
-      await this.userService.isEmailUnique(dto.email);
+      const user = await this.userService.isEmailUnique(dto.email);
+      console.log(user);
 
       const salt = +this.configService.get('SALT');
       const hashedPassword = await bcrypt.hash(dto.password, salt);
@@ -35,6 +36,4 @@ export class AuthService {
       throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  public async testGoogle() {}
 }
