@@ -1,10 +1,16 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  refs,
+} from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { ERouteName } from '../../common/enums/route-name.enum';
-import { GoogleAuthResponseDto } from './dto/response/google-auth-response.dto';
+import { GoogleAuthResponseDto } from './dto/response/google-auth.response.dto';
 import { GoogleAuthService } from './google-auth.service';
 import { IGoogleAuth } from './interfaces/google.interfaces';
 
@@ -24,6 +30,10 @@ export class GoogleAuthController {
   @ApiOperation({ summary: 'Register or login via google' })
   @Get(ERouteName.GOOGLE_REDIRECT)
   @UseGuards(AuthGuard('google'))
+  @ApiExtraModels(GoogleAuthResponseDto)
+  @ApiOkResponse({
+    schema: { anyOf: refs(GoogleAuthResponseDto) },
+  })
   async googleAuthRedirect(
     @Req() req: IGoogleAuth,
     @Res({ passthrough: true }) res: Response,

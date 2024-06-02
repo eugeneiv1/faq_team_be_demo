@@ -5,7 +5,7 @@ import { Response } from 'express';
 
 import { UserEntity } from '../../entities/user.entity';
 import { UserRepository } from '../repository/services/user.repository';
-import { GoogleAuthResponseDto } from './dto/response/google-auth-response.dto';
+import { GoogleAuthResponseDto } from './dto/response/google-auth.response.dto';
 import { EGoogLeAuthAction } from './enums/google-auth-action.enum';
 import { IGoogleAuth } from './interfaces/google.interfaces';
 
