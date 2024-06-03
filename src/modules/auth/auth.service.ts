@@ -16,8 +16,7 @@ export class AuthService {
 
   public async signUp(dto: SignUpRequestDto): Promise<void> {
     try {
-      const user = await this.userService.isEmailUnique(dto.email);
-      console.log(user);
+      await this.userService.isEmailUnique(dto.email);
 
       const salt = +this.configService.get('SALT');
       const hashedPassword = await bcrypt.hash(dto.password, salt);

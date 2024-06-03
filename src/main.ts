@@ -6,7 +6,7 @@ import { AppModule } from 'src/app.module';
 import { DOCS_ROUTE, swgBuilderLabels } from 'src/utils/constants';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const configService = app.get(ConfigService);
 
   app.use(cookieParser());
