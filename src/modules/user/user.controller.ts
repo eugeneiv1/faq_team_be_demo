@@ -7,12 +7,13 @@ import {
   Patch,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { ERouteName } from 'src/common/enums/route-name.enum';
 
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @ApiTags('User')
-@Controller('users')
+@Controller(ERouteName.UPDATE_ROUTE)
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Patch(':id')
