@@ -14,11 +14,18 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
 
-    response.status(status).json({
+    const responseBody: any = {
       statusCode: status,
       timestamp: new Date().toISOString(),
       path: request.url,
       message: exception.message,
-    });
+    };
+
+    const exceptionResponse = exception.getResponse();
+    if (typeof exceptionResponse === 'object' && 'cause' in exceptionResponse) {
+      responseBody.cause = exceptionResponse['cause'];
+    }
+
+    response.status(status).json(responseBody);
   }
 }
