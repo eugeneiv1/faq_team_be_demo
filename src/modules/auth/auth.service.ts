@@ -31,6 +31,7 @@ export class AuthService {
     } catch (error) {
       throw new InternalServerErrorException(
         AuthServiceErrors.errors.VALIDATION,
+        { cause: error },
       );
     }
   }
@@ -42,7 +43,9 @@ export class AuthService {
         access_token: this.jwtService.sign(payload),
       };
     } catch (error) {
-      throw new InternalServerErrorException(AuthServiceErrors.errors.LOGIN);
+      throw new InternalServerErrorException(AuthServiceErrors.errors.LOGIN, {
+        cause: error,
+      });
     }
   }
 
@@ -50,7 +53,10 @@ export class AuthService {
     try {
       return await this.usersService.create(user);
     } catch (error) {
-      throw new InternalServerErrorException(AuthServiceErrors.errors.REGISTER);
+      throw new InternalServerErrorException(
+        AuthServiceErrors.errors.REGISTER,
+        { cause: error },
+      );
     }
   }
 }

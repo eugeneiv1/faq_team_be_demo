@@ -26,6 +26,14 @@ export class UserDto {
   password: string;
 }
 
+export class AuthReqDto {
+  @ApiProperty({
+    description: 'The password for the user account.',
+    example: '$3f$00$bfOlGlUdTopkI1aKJgfXEwRXhbss7spSgaktfTskP01IDAObl7Aiu',
+  })
+  user: UserDto;
+}
+
 export class AccesTokenDto {
   @ApiProperty({
     description: 'The access token a user receives to the client',

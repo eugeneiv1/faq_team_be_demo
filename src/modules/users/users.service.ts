@@ -27,7 +27,9 @@ export class UsersService {
       }
       return user;
     } catch (error) {
-      throw new InternalServerErrorException(UsersServiceErrors.errors.FIND);
+      throw new InternalServerErrorException(UsersServiceErrors.errors.FIND, {
+        cause: error,
+      });
     }
   }
 
@@ -42,7 +44,9 @@ export class UsersService {
       } as UserDto;
       return await this.usersRepository.save(newUser);
     } catch (error) {
-      throw new InternalServerErrorException(UsersServiceErrors.errors.CREATE);
+      throw new InternalServerErrorException(UsersServiceErrors.errors.CREATE, {
+        cause: error,
+      });
     }
   }
 }
