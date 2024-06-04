@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
-import cryptoRandomString from 'crypto-random-string';
+import randomize from 'randomatic';
 
 import { EMailTemplate } from '../mail/enums/mail-template.enum';
 import { ESubjectName } from '../mail/enums/subject-name.enum';
@@ -25,10 +25,7 @@ export class AuthService {
 
       const salt = +this.configService.get('SALT');
       const hashedPassword = await bcrypt.hash(dto.password, salt);
-      const otp = cryptoRandomString({
-        length: this.configService.get('OTP_LENGTH'),
-        type: 'numeric',
-      });
+      const otp = randomize('0', this.configService.get('OTP_LENGTH'));
       await Promise.all([
         await this.userRepository.save(
           this.userRepository.create({ ...dto, password: hashedPassword }),
