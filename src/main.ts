@@ -1,10 +1,10 @@
-import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
-import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from 'src/app.module';
-import { swgBuilderLabels } from 'src/utils/generalConstants';
-import { ERouteNames } from 'src/entities/enums/route-names.enum';
+import { ERouteName } from 'src/common/enums/route-name.enum';
 import { HttpExceptionFilter } from 'src/common/filters/httpException.filter';
+import { swgBuilderLabels } from 'src/utils/generalConstants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,9 +18,9 @@ async function bootstrap() {
     .addTag(swgBuilderLabels.tag)
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup(ERouteNames.DOCS_ROUTE, app, document);
+  SwaggerModule.setup(ERouteName.DOCS_ROUTE, app, document);
 
-  const port = configService.get<number>('SERVER_PORT') || 3000;
+  const port = configService.get<number>('SERVER_PORT');
   await app.listen(port);
 }
 bootstrap();

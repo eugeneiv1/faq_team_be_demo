@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import * as path from 'path';
 import * as process from 'process';
 import { DB_TYPE } from 'src/utils/generalConstants';
@@ -22,8 +22,8 @@ export class MysqlService implements TypeOrmOptionsFactory {
       migrations: [
         path.join(process.cwd(), 'dist', 'src', 'migrations', '*.js'),
       ],
-      synchronize: false,
       migrationsRun: true,
+      synchronize: false,
     };
   }
 }
