@@ -126,12 +126,6 @@ export class UserDto {
     example: 10,
   })
   shoes_size: number;
-
-  @ApiProperty({
-    description: 'The cart items of the user.',
-    example: ['item1', 'item2'],
-  })
-  cart: string[];
 }
 
 export class AuthReqDto {
