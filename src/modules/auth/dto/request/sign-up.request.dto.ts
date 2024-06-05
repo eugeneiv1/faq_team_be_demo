@@ -7,7 +7,7 @@ export class SignUpRequestDto {
   @IsString()
   @Length(3, 20)
   @Type(() => String)
-  user_name: string;
+  full_name: string;
 
   @ApiProperty({ example: 'test@gmail.com' })
   @IsString()
