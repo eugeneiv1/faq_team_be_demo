@@ -9,7 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import randomize from 'randomatic';
+import * as randomize from 'randomatic';
 import {
   AccesTokenDto,
   UserDto,
@@ -36,26 +36,31 @@ export class AuthService {
     private readonly mailService: MailService,
 
     private jwtService: JwtService,
-
   ) {}
 
-  public async signUp(dto: SignUpRequestDto): Promise<void> {
+  public async signUp(dto: SignUpRequestDto) {
     try {
       await this.userService.isEmailUnique(dto.email);
       const salt = +this.configService.get('SALT');
       const hashedPassword = await bcrypt.hash(dto.password, salt);
-      const otp = randomize('0', this.configService.get('OTP_LENGTH'));
+      const otp = randomize('0', 6);
       await Promise.all([
         await this.userRepository.save(
-          this.userRepository.create({ ...dto, password: hashedPassword }),
+          this.userRepository.create({
+            ...dto,
+            password: hashedPassword,
+            otp_code: otp,
+          }),
         ),
         await this.mailService.sendMail(
           dto.email,
           ESubjectName.VERIFY,
           EMailTemplate.VERIFY,
-          { otp_code: otp, name: dto.user_name },
+          { otp_code: otp, name: dto.full_name },
         ),
       ]);
+
+      return { email: dto.email };
     } catch (error) {
       if (
         error instanceof HttpException &&
@@ -69,7 +74,10 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string): Promise<UserDto> {
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: { password: true, is_verified: true },
+    });
     if (!user) {
       throw new NotFoundException(UsersServiceErrors.errors.NOT_FOUND(email));
     }
@@ -86,6 +94,7 @@ export class AuthService {
       const payload = { email: user.email, sub: user.id };
       return {
         access_token: this.jwtService.sign(payload),
+        is_verified: user.is_verified,
       };
     } catch (error) {
       throw new InternalServerErrorException(AuthServiceErrors.errors.LOGIN, {

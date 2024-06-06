@@ -35,7 +35,7 @@ export class UserEntity extends BaseEntity {
   @Column({ default: false })
   is_deleted_by_admin: boolean;
 
-  @Column({ type: 'enum', enum: EUserRole, nullable: true })
+  @Column({ nullable: true })
   user_role: EUserRole;
 
   @Column({ nullable: true })

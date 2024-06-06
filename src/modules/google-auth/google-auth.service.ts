@@ -5,7 +5,6 @@ import { Response } from 'express';
 
 import { UserEntity } from '../../entities/user.entity';
 import { UserRepository } from '../repository/services/user.repository';
-import { GoogleAuthResponseDto } from './dto/response/google-auth.response.dto';
 import { EGoogLeAuthAction } from './enums/google-auth-action.enum';
 import { IGoogleAuth } from './interfaces/google.interfaces';
 
@@ -17,10 +16,7 @@ export class GoogleAuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  public async googleLogin(
-    req: IGoogleAuth,
-    res: Response,
-  ): Promise<GoogleAuthResponseDto> {
+  public async googleLogin(req: IGoogleAuth, res: Response) {
     let accessToken: string;
     let user: UserEntity;
     let authInfo = EGoogLeAuthAction.SIGNIN;
@@ -31,6 +27,7 @@ export class GoogleAuthService {
     try {
       const { email, firstName, lastName } = req.user;
       const isEmailExist = await this.userRepository.findOneBy({ email });
+      const isUser = await this.userRepository.findOneBy({ email });
 
       if (!isEmailExist) {
         user = await this.userRepository.save(
@@ -49,14 +46,7 @@ export class GoogleAuthService {
           },
           { secret: tokenSecret, expiresIn: tokenExpires },
         );
-
-        return {
-          accessToken,
-          authInfo,
-          email: user.email,
-          full_name: user.full_name,
-          is_verified: user.is_verified,
-        };
+        return { accessToken, authInfo };
       }
 
       accessToken = this.jwtService.sign(
@@ -67,13 +57,17 @@ export class GoogleAuthService {
         { secret: tokenSecret, expiresIn: tokenExpires },
       );
 
+      await this.userRepository.update(isUser.email, {
+        full_name: isUser.full_name,
+      });
+
       res.cookie('access_token', accessToken, {
         maxAge: 2592000000, // 30 days in milliseconds
         sameSite: true,
         secure: false, // Set to true if using HTTPS in production
       });
 
-      return { accessToken, authInfo, is_verified: isEmailExist.is_verified };
+      return { accessToken, authInfo };
     } catch (error) {
       if (
         error instanceof HttpException &&

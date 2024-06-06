@@ -1,16 +1,13 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
-  ApiExtraModels,
-  ApiOkResponse,
   ApiOperation,
   ApiTags,
-  refs,
 } from '@nestjs/swagger';
 import { Response } from 'express';
 
 import { ERouteName } from '../../common/enums/route-name.enum';
-import { GoogleAuthResponseDto } from './dto/response/google-auth.response.dto';
+import { EGoogLeAuthAction } from './enums/google-auth-action.enum';
 import { GoogleAuthService } from './google-auth.service';
 import { IGoogleAuth } from './interfaces/google.interfaces';
 
@@ -30,14 +27,19 @@ export class GoogleAuthController {
   @ApiOperation({ summary: 'Register or login via google' })
   @Get(ERouteName.GOOGLE_REDIRECT)
   @UseGuards(AuthGuard('google'))
-  @ApiExtraModels(GoogleAuthResponseDto)
-  @ApiOkResponse({
-    schema: { anyOf: refs(GoogleAuthResponseDto) },
-  })
   async googleAuthRedirect(
     @Req() req: IGoogleAuth,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<GoogleAuthResponseDto> {
-    return await this.googleAuthService.googleLogin(req, res);
+  ) {
+    const { accessToken, authInfo } = await this.googleAuthService.googleLogin(
+      req,
+      res,
+    );
+    if (authInfo === EGoogLeAuthAction.SIGNUP) {
+      res.redirect(
+        `http://localhost:5173/faq_team_fe/confirm-credentials?token=${accessToken}`,
+      );
+    }
+    res.redirect('http://localhost:5173');
   }
 }

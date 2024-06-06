@@ -25,7 +25,7 @@ export class AuthController {
     description: 'The user has been successfully registered',
   })
   @Post(ERouteName.SIGNUP_ROUTE)
-  public async signUp(@Body() dto: SignUpRequestDto): Promise<void> {
+  public async signUp(@Body() dto: SignUpRequestDto) {
     return await this.authService.signUp(dto);
   }
 
