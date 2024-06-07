@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {Body, Controller, HttpCode, HttpStatus, Param, Patch, Post} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ERouteName } from 'src/common/enums/route-name.enum';
 
 import { UserService } from './user.service';
+import {UpdateUserDto} from "./dto/update-user.dto";
 
 @ApiTags('User')
 @Controller(ERouteName.USERS_ROUTE)
@@ -28,13 +29,13 @@ export class UserController {
     return await this.userService.updateUser(dto);
   }
 
-  // @Patch(ERouteName.USER_UPDATEBYID_ROUTE)
-  // @HttpCode(HttpStatus.OK)
-  // async update(
-  //   @Param('id') id: string,
-  //   @Body() updateUserDto: UpdateUserDto,
-  // ): Promise<{ message: string }> {
-  //   await this.userService.updateUser(updateUserDto, id);
-  //   return { message: 'user updated successfully' };
-  // }
+  @Patch('/update/:id')
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<{ message: string }> {
+    await this.userService.updateUserById(updateUserDto, id);
+    return { message: 'user updated successfully' };
+  }
 }

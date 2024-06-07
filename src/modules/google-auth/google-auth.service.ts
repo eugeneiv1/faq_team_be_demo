@@ -46,6 +46,7 @@ export class GoogleAuthService {
           },
           { secret: tokenSecret, expiresIn: tokenExpires },
         );
+        console.log(accessToken);
         return { accessToken, authInfo };
       }
 
@@ -66,6 +67,8 @@ export class GoogleAuthService {
         sameSite: true,
         secure: false, // Set to true if using HTTPS in production
       });
+
+      console.log(accessToken);
 
       return { accessToken, authInfo };
     } catch (error) {

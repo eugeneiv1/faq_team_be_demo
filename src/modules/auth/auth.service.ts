@@ -74,13 +74,16 @@ export class AuthService {
   }
 
   async validateUser(email: string, password: string): Promise<UserDto> {
+    console.log(email, password)
     const user = await this.userRepository.findOne({
       where: { email },
       select: { password: true, is_verified: true },
     });
+
     if (!user) {
       throw new NotFoundException(UsersServiceErrors.errors.NOT_FOUND(email));
     }
+
     if (user && (await bcrypt.compare(password, user.password))) {
       return user;
     }

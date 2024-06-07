@@ -110,9 +110,43 @@ export class UserService {
     }
   }
 
+  public async updateUserById(updateUserDto: UpdateUserDto, id: string): Promise<void> {
+    try {
+      const { password, ...dtoWithoutPassword } = updateUserDto;
+      const user = await this.isUserExist(id);
+
+      if (!user) {
+        throw new HttpException(
+            EErrorMessage.USER_NOT_EXIST,
+            HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      if (password) {
+        const salt = +this.configService.get('SALT');
+        const hashedPassword = await bcrypt.hash(updateUserDto.password, salt);
+        user.password = hashedPassword;
+      }
+
+      await this.userRepository.update(
+          id,
+          { ...dtoWithoutPassword, password: user.password},
+      );
+    } catch (error) {
+      if (
+          error instanceof HttpException &&
+          error.getStatus() === HttpStatus.BAD_REQUEST
+      ) {
+        throw error;
+      }
+
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async getUser(token) {
     const payload = this.jwtService.verify(token, { secret: 'bestJwtSecret' });
-    const user = await this.isUserExist(payload.id);
+    const user = await this.isUserExist(payload.user_id);
     return {
       email: user.email,
       full_name: user.full_name,
@@ -144,14 +178,15 @@ export class UserService {
   }
 
   public async verifyOtp(email, otp_code) {
+    console.log(email, otp_code)
     const user = await this.userRepository.findOneBy({ email });
-
+    console.log(user)
     if (!user) {
       throw new UnauthorizedException('User doesnt exist');
     }
     await this.userRepository.save({ ...user, is_verified: false });
-    console.log(user.is_verified);
     if (user.otp_code !== otp_code) {
+      console.log('dfg')
       throw new UnauthorizedException('otp code is incorrect');
     }
 
